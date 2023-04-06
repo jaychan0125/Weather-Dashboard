@@ -1,0 +1,25 @@
+header {
+  background-color: aquamarine;
+  padding: 10px;
+  text-align: center;
+}
+
+main {
+  border: solid 1px black;
+}
+
+#currentCity {
+  border: solid 1px green;
+
+}
+
+#fiveDay {
+  border: solid 1px orangered;
+
+}
+
+.block {
+  display: block;
+  width: fit-content;
+  
+}
