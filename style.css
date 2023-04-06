@@ -18,8 +18,8 @@ main {
 
 }
 
-.block {
-  display: block;
-  width: fit-content;
-  
+.btnBox {
+  display: flex;
+  flex-direction: column;
 }
+

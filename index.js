@@ -40,7 +40,7 @@ $( function() {
   function makeBtn() {
     var newBtn = $('<button>')
     newBtn.attr('type', 'button');
-    newBtn.addClass("btn btn-secondary btn-lg btn-block block m-1");
+    newBtn.addClass("btn btn-secondary btn-lg btn-block m-1");
     newBtn.text(`${citySearch.val()}`); //NEED TO ADD IT SO FUNCTIONS TO WHAT THE CITY IS
     prevCities.prepend(newBtn)
     console.log(prevCities.get(0).childElementCount)  //WHAT IS .GET(0) WHY ARENT THESE WORKING
