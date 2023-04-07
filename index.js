@@ -12,7 +12,7 @@ var prevCities = $('#prevCities')
 var apiKey = 'cb46b644cecafb55998e4ecf9d01a0e5'
 
 // var getGeoInfo = function (citySearch) {
-var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=Markham,&limit=1&appid=${apiKey}`;
+var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch},&limit=1&appid=${apiKey}`;
 fetch(geoAPI)
   .then(function (response) {
     return response.json();
