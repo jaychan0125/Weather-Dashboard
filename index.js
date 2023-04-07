@@ -12,14 +12,15 @@ var prevCities = $('#prevCities')
 var apiKey = 'cb46b644cecafb55998e4ecf9d01a0e5'
 
 // var getGeoInfo = function (citySearch) {
-var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch},&limit=1&appid=${apiKey}`;
-fetch(geoAPI)
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    console.log(data);
-  })
+// console.log(citySearch)
+// var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch.val()},&limit=1&appid=${apiKey}`;
+// fetch(geoAPI)
+//   .then(function (response) {
+//     return response.json();
+//   })
+//   .then(function (data) {
+//     console.log(data);
+//   })
 // }
 
 
@@ -57,11 +58,49 @@ $(function () {
 
 function searchHistory(event) {
   event.preventDefault();
-  // console.log(citySearch.val());
+  console.log(citySearch.val());
   searchHistoryArr.unshift(citySearch.val());
   // console.log(searchHistoryArr);
   searchHistoryArr.length >= 5 ? searchHistoryArr.pop() : null;
   localStorage.setItem('searchHistory', searchHistoryArr);
+
+  var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch.val()},&limit=1&appid=${apiKey}`;
+  fetch(geoAPI)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      var lat = data[0].lat
+      var lon = data[0].lon
+      console.log(lat)
+      console.log(lon)
+    
+      var weatherAPI = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+      fetch(weatherAPI)
+      .then(function (responseW) {
+        return responseW.json();
+      })
+      .then(function (dataW) {
+        console.log(dataW);
+        console.log(`the temp in celcius: ${Math.round(dataW.list[0].main.temp - 273.15)}`)
+
+
+
+
+
+      })})
+
+
+
+
+
+
+
+
+
+
+
 
   makeBtn()
 }
