@@ -59,6 +59,7 @@ function getWeatherForecast(lat, lon) {
       var weather = data.list[0].weather[0].description;
       var wind = ((data.list[0].wind.speed) * 3.6).toFixed(2);
       var humidity = data.list[0].main.humidity;
+      var img = data.list[0].weather[0].icon
       //set current forecast 
       console.log(searchHistoryArr[0]);
       curCityHeader.text(`${thisDay} ${searchHistoryArr[0]}`);
@@ -66,6 +67,7 @@ function getWeatherForecast(lat, lon) {
       todayWeather.text(weather);
       todayWind.text(`wind: ${wind}km/h`);
       todayHumidity.text(`humidity: ${humidity}%`);
+      $('.current-img').attr('src', `https://openweathermap.org/img/wn/${img}@2x.png`)
 
       //set the 5-days forecast
       for (i = 7; i < data.list.length; i += 8) {
@@ -75,17 +77,20 @@ function getWeatherForecast(lat, lon) {
         var nextWeather = data.list[i].weather[0].description;
         var nextWind = data.list[i].wind.speed;
         var nextHumidity = data.list[i].main.humidity;
+        var nextImgs = data.list[i].weather[0].icon;
         var nextDaysVar = (i + 1) / 8;    //1-5
         var days = `day${nextDaysVar}`;
         var temps = `temp${nextDaysVar}`;
         var weathers = `weather${nextDaysVar}`;
         var winds = `wind${nextDaysVar}`;
         var humidities = `humidity${nextDaysVar}`;
+        var imgs = `day${nextDaysVar}-img`;
         $(`.${days}`).text(nextDay);
         $(`.${temps}`).text(`${nextTemp}°C`);
         $(`.${weathers}`).text(nextWeather);
         $(`.${winds}`).text(`wind: ${nextWind}km/h`);
         $(`.${humidities}`).text(`humidity: ${nextHumidity}%`);
+        $(`.${imgs}`).attr('src', `https://openweathermap.org/img/wn/${nextImgs}@2x.png`);
       }
     })
 };
