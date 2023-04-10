@@ -8,14 +8,10 @@ var prevCities = $('#prevCities')
 
 var today = dayjs();
 var thisDay = today.format('YYYY-MM-DD');
-var day = today.format('DD');
-var nextDay = (parseInt(day) + 1);
-console.log(`day + 1: ${nextDay}`);
-var thisHour = today.format('HH');
-var closestTime = `${thisDay} ${thisHour}`;
-// console.log(closestTime)
+var thisMonth = today.format('YYYY-MM')
 
-//id=currentCity HTML slots
+
+//id=currentCity HTML
 var curCityHeader = $('.current-city-header')
 var todayTemp = $('.current-temp')
 var todayWeather = $('.current-weather')
@@ -23,80 +19,107 @@ var todayWind = $('.currernt-wind')
 var todayHumidity = $('.current-humidity')
 
 
-
-
-
 function searchHistory(event) {
   event.preventDefault();
   console.log(`seach value: ${citySearch.val()}`);
-  searchHistoryArr.unshift(citySearch.val());
+  searchWeather(citySearch.val());
+  citySearch.val('');
+}
+
+function searchWeather(city) { 
+  //was originally thinking of making the city an object and putting the 
+  //keys(temp/weather/etc)/values in it, but i DONT want to save those values, 
+  //as I just want to switch the seach to that city and show it's CURRENT info.
+  //so do i still need this?  
+  searchHistoryArr.unshift(city);
   // console.log(searchHistoryArr);
   searchHistoryArr.length >= 6 ? searchHistoryArr.pop() : null;
   localStorage.setItem('searchHistory', searchHistoryArr);
 
 
   //get lat & lon values for the city searched: 
-  var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${citySearch.val()},&limit=1&appid=${apiKey}`;
+  var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
   fetch(geoAPI)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
+      console.log(`geoData: ${data}`);
+      console.log(data)
       var lat = data[0].lat
       var lon = data[0].lon
-      console.log(`lat: ${lat}`)
-      console.log(`lon: ${lon}`)
-    
-      //get the weather using the lat/lon coordinates
-      var weatherAPI = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
-      fetch(weatherAPI)
-      .then(function (responseW) {
-        return responseW.json();
-      })
-      .then(function (dataW) {
-        console.log(dataW);
-        var temp = Math.round(dataW.list[0].main.temp);
-        console.log(`the temp in celcius: ${temp}`)
-        var weather = dataW.list[0].weather[0].description;
-        console.log(`weather: ${weather}`)
-        var wind = ((dataW.list[0].wind.speed) * 3.6).toFixed(2);
-        console.log(`wind: ${wind}km/s`)
-        var humidity = dataW.list[0].main.humidity;
-        console.log(`humidity: ${humidity}%`)
+      // console.log(`lat: ${lat}`)
+      // console.log(`lon: ${lon}`)
+      getWeatherForecast(lat, lon)
+    })
+  makeBtn(city)
+}
 
-        console.log(citySearch.val()) //WHY ISNT THIS WORKING
-        curCityHeader.text(`${citySearch.val()} ${thisDay}`)
-        todayTemp.text(`${temp}°C`)
-        todayWeather.text(weather)
-        todayWind.text(`wind: ${wind}km/s`)
-        todayHumidity.text(`humidity: ${humidity}%`)
-        
-        // var tmrData = data.find(`2023-04-${nextDay} 12`)
-        // console.log(tmrData)
+function getWeatherForecast(lat, lon) {
+  //get the weather using the lat/lon coordinates
+  var weatherAPI = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  fetch(weatherAPI)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      var temp = Math.round(data.list[0].main.temp);
+      var weather = data.list[0].weather[0].description;
+      var wind = ((data.list[0].wind.speed) * 3.6).toFixed(2);
+      var humidity = data.list[0].main.humidity;
+      console.log(`the temp in celcius: ${temp}`)
+      console.log(`weather: ${weather}`)
+      console.log(`wind: ${wind}km/h`)
+      console.log(`humidity: ${humidity}%`)
+
+      //ADD TO THE HTML FOR CURRENT: 
+      console.log(searchHistoryArr[0])
+      curCityHeader.text(`${thisDay} ${searchHistoryArr[0]}`)
+      todayTemp.text(`${temp}°C`)
+      todayWeather.text(weather)
+      todayWind.text(`wind: ${wind}km/h`)
+      todayHumidity.text(`humidity: ${humidity}%`)
+
+      //trying to figure out how to find for the other days, probs just use the info at noon: 
+      for (i = 7; i < data.list.length; i += 8) {
+        console.log(data.list[i])
+        var nextDay = data.list[i].dt_txt.substring(5,10)
+        var nextTemp = Math.round(data.list[i].main.temp)  
+        var nextWeather = data.list[i].weather[0].description  
+        var nextWind = data.list[i].wind.speed 
+        var nextHumidity = data.list[i].main.humidity 
+        var nextDaysVar = (i+1)/8    //1-5
+        var days = `day${nextDaysVar}`
+        var temps = `temp${nextDaysVar}`
+        var weathers = `weather${nextDaysVar}`
+        var winds =  `wind${nextDaysVar}`
+        var humidities = `humidity${nextDaysVar}`
+        $(`.${days}`).text(nextDay)
+        $(`.${temps}`).text(`${nextTemp}°C`)
+        $(`.${weathers}`).text(nextWeather)
+        $(`.${winds}`).text(`wind: ${nextWind}km/h`)
+        $(`.${humidities}`).text(`humidity: ${nextHumidity}%`)
+       }
 
 
-
-
-
-      })})
-  makeBtn()
+    })
 }
 
 
 
-
-
 //when search, create a button with searched city
-function makeBtn() {
+function makeBtn(city) {
   var newBtn = $('<button>')
   newBtn.attr('type', 'button');
   newBtn.addClass("btn btn-secondary btn-lg btn-block m-1");
-  newBtn.text(`${citySearch.val()}`); //NEED TO ADD IT SO FUNCTIONS TO WHAT THE CITY IS
+  newBtn.text(`${city}`); //NEED TO ADD IT SO FUNCTIONS TO WHAT THE CITY IS
   prevCities.prepend(newBtn)
+  newBtn.on('click', function() {
+    searchWeather(city)
+  })
   // console.log(prevCities.get(0).childElementCount)
   // console.log(prevCities.children().last())  
-  citySearch.val('');
   removeLast();
 }
 //when more than 5 prev city buttons, get rid of the last/oldest search: 
