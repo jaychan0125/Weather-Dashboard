@@ -127,7 +127,20 @@ $(function () {
     "Banff",
     "Edmonton",
     "Seoul",
-    "Tokyo"
+    "Tokyo",
+    "Osaka",
+    "New York",
+    "Paris",
+    "Barcelona",
+    "Las Vegas",
+    "Los Angeles",
+    "Shanghai",
+    "Singapore",
+    "Prague",
+    "Taipei",
+    "Rome",
+    "Phuket",
+    "Bangkok"
   ];
   $("#citySearch").autocomplete({
     source: availableTags

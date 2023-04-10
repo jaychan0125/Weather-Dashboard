@@ -4,23 +4,42 @@
 /* https://openweathermap.org/forecast5 */
 
 header {
-  background-color: aquamarine;
+  background-color: #ffecb7;
   padding: 10px;
+  text-align: center;
+  color: #0E2239;
+}
+
+body {
+  background-color:  #fff7e0
+}
+
+.current-city-header {
+  background-color: #ffecb7;
+  font-size: x-large;
+  font-weight: 600;
+}
+
+.card-body {
+  text-align: center;
+  background-color: #9EC1A3;
+}
+
+.list-group {
   text-align: center;
 }
 
-main {
-  border: solid 1px black;
+.list-group-item {
+  background-color: #CFE0C3;
 }
 
-#currentCity {
-  border: solid 1px green;
-
+.btn-secondary {
+  background-color: #ffecb7;
+  color: #0E2239;
 }
 
-#fiveDay {
-  border: solid 1px orangered;
-
+.btn-secondary:hover {
+  background-color: #F0C245;
 }
 
 .btnBox {
