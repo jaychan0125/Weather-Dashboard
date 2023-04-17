@@ -1,13 +1,10 @@
-# Work Day Scheduler
+# Weather Dashboard
 
-## 05 Third-Party APIs: Work Day Scheduler
+## 06 Server-Side APIs: Weather Dashboard
 
-This weeks challenge will be so useful in helping me stay organised! We’re making a workday scheduler! Following the theme of ‘making our lives easier’, we were given starter code to work with! Even hints, yay! 
+The rollercoaster I've been on during this challenge... I started with the skeleton and jquery UI while we were still learning how to use server-side APIs, because I was like maybe I could try getting some of what I SHOULD know how to do done first while I learn the rest of the material! Fast-forward to the due-date and I'm still working on it! By the end of the weekend we learned the how to use the APIs, I had most of it functioning! Which I was really happy about, although not as well as I wanted. So I booked a tutor session to see if I could get the rest of the functionalities I wanted to implement. Unfortunately, after the session I reviewed it, left, and came back after awhile; and I'm not sure what happened but it was gone?? So I was back to where I was before the tutor session, I tried implementing some of it again on my own, but not all of it worked and I was very frustrated, disheartened, and honestly fell into a slump for a few days because of it… But here we are! 
 
-I think one of the biggest lessons I’ve learned from this challenge is that my code doesn’t have to be the most condensed (although it would be ideal if it was more legible and succinct), and as long as it FUNCTIONS as it should then I’ll be okay. I was paralyzed for the better part of an evening when I was struggling to write just one line of code so that the localStorage items display in their appropriate sections. After reaching out to AskBCS, Drew kindly helped me understand localStorage better, and showed me that it was okay to just have a line of code for EACH SECTION to display their stored contents. During my review before submitting the challenge, I realised that the code I put for this part had a PATTERN, and I WOULD be able to shorten it using some of the logic I used in other parts of my code! It was very exciting since this was originally how I envisioned to write it, but it just took me understanding how my code functions better first before I could do it! 
-
-Other than this revelation, the trickier part of this challenge would likely be traversing the DOM, and accessing the elements that I needed, especially when all the sections are basically the same except for an ID. 
-I feel like overall this one was pretty straightforward; and given access to libraries such as Day.js, it made the task much more manageable than if I didn’t have it. 
+This is my Weather Dashboard! Using the Open Weather API, it will tell you the weather in the city you’re searching! It does this by using 2 APIs provided by Open Weather, one for the geolocation, using the city to get the latitude and longitude; then passing those values onto the weather API to get the weather info! Then using a mix of javascript and jquery, it creates buttons with the cities values saved onto them so you’re able to search them easier!  
  
 
 ## Table of Contents
@@ -22,7 +19,7 @@ I feel like overall this one was pretty straightforward; and given access to lib
 
 Link to my weather dashboard: 
 
-**https://jaychan0125.github.io/WorkDay-Scheduler/**
+**https://jaychan0125.github.io/Weather-Dashboard/**
 
 
 ## Requirements
