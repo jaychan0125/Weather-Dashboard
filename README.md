@@ -58,7 +58,7 @@ Once you hit search, the weather dashboard for the current day, the 5-day weathe
 
 ## Citations
 
-Maqsood, A., Moatar, T., Krishna, &amp; Zhang, S. (2023). Web APIs Day 1-3. Lecture. 
+Maqsood, A., Moatar, T., Krishna, &amp; Zhang, S. (2023). Server-Side APIs Day 1-3. Lecture. 
 
 Compagnoni, J. (2023). Tutoring.
 

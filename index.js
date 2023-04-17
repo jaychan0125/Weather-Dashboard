@@ -50,7 +50,6 @@ function searchWeather(city) {
   })
 }
 
-
 function getWeatherForecast(lat, lon) {
   //get the weather using the lat/lon coordinates
   var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
@@ -118,7 +117,6 @@ function makeBtnAndDisplayOnScreen(place) {
   citySearch.val('')
   removeOldestBtn();
 }
-
 
 function getFromLocalStorageAndMakeButtons() {
   if(searchHistoryArr.length == 0) {
