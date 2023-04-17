@@ -5,7 +5,6 @@ var searchForm = $('#search-form');
 var citySearch = $('input[name="citySearch"]');
 var searchHistoryArr = JSON.parse(localStorage.getItem('searchHistory')) || [];
 var prevCities = $('#prevCities');
-var newBtn
 //dates
 var today = dayjs();
 var thisDay = today.format('YYYY-MM-DD');
@@ -18,8 +17,11 @@ var todayWind = $('.currernt-wind');
 var todayHumidity = $('.current-humidity');
 
 
-function searchWeather(city) {
-  //checks to see its not an empty string:
+function searchWeather(event) {
+  // prevent default reload behavior by web browser upon a submit event
+  event.preventDefault();
+  let city = citySearch.val();
+
   if(!city) {
     alert('Please enter a correct city or province location');
     return null;
@@ -32,40 +34,42 @@ function searchWeather(city) {
     return response.json();
   })
   .then(function (data) {
-    // console.log(data);
-    // console.log(city);
-    //check to see if inputed location is valid:
+    //console.log(data);
+    //console.log(city)
+    //if the inputed city is invalid (API does not return values) or nothing is entered, exit.  || citySearch.val() === ''  didnt work? 
+    //BUT NOW IF I CLICK ON A BUTTON INSTEAD OF USING THE SEARCH BAR IT ALSO GIVES ME THE ALERT
     if (data.length === 0) {
       alert('Invalid, Please enter a different city');
       return null;
     }
     var lat = data[0].lat;
     var lon = data[0].lon;
-    // console.log(lat, lon)
-    getWeatherForecast(lat, lon);
+    getAllWeather(lat, lon);
     
     searchHistoryArr.unshift(city);
+    // console.log(searchHistoryArr);
     searchHistoryArr.length >= 7 ? searchHistoryArr.pop() : null;
     localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
   })
 }
 
 
-function getWeatherForecast(lat, lon) {
+function getAllWeather(lat, lon) {
   //get the weather using the lat/lon coordinates
-  var weatherAPI = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  var weatherAPI = `http://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=[minutely,hourly,alerts]&appid=${apiKey}&units=metric`;
   fetch(weatherAPI)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
-      var temp = Math.round(data.list[0].main.temp);
-      var weather = data.list[0].weather[0].description;
-      var wind = ((data.list[0].wind.speed) * 3.6).toFixed(2);
-      var humidity = data.list[0].main.humidity;
-      var img = data.list[0].weather[0].icon
+      console.log('onecall data is', data);
+      var temp = data.current.temp; //Math.round(data.list[0].main.temp);
+      var weather = data.current.weather[0]["description"]; //list[0].weather[0].description;
+      var wind = data.current.wind_speed; //((data.list[0].wind.speed) * 3.6).toFixed(2);
+      var humidity = data.current.humidity //.list[0].main.humidity;
+      var img = data.current.weather[0]["icon"] //.list[0].weather[0].icon
       //set current forecast 
+      //console.log(searchHistoryArr[0]);
       curCityHeader.text(`${thisDay} ${searchHistoryArr[0]}`);
       todayTemp.text(`${temp}°C`);
       todayWeather.text(weather);
@@ -73,68 +77,65 @@ function getWeatherForecast(lat, lon) {
       todayHumidity.text(`humidity: ${humidity}%`);
       $('.current-img').attr('src', `https://openweathermap.org/img/wn/${img}@2x.png`)
 
-      //set the 5-days forecast
-      for (var i = 7; i < data.list.length; i += 8) {
-        console.log(data.list[i]);
-        var nextDay = data.list[i].dt_txt.substring(5, 10);
-        var nextTemp = Math.round(data.list[i].main.temp);
-        var nextWeather = data.list[i].weather[0].description;
-        var nextWind = data.list[i].wind.speed;
-        var nextHumidity = data.list[i].main.humidity;
-        var nextImgs = data.list[i].weather[0].icon;
-        var nextDaysVar = (i + 1) / 8;    //1-5
-        var days = `day${nextDaysVar}`;
-        var temps = `temp${nextDaysVar}`;
-        var weathers = `weather${nextDaysVar}`;
-        var winds = `wind${nextDaysVar}`;
-        var humidities = `humidity${nextDaysVar}`;
-        var imgs = `day${nextDaysVar}-img`;
-        $(`.${days}`).text(nextDay);
-        $(`.${temps}`).text(`${nextTemp}°C`);
-        $(`.${weathers}`).text(nextWeather);
-        $(`.${winds}`).text(`wind: ${nextWind}km/h`);
-        $(`.${humidities}`).text(`humidity: ${nextHumidity}%`);
-        $(`.${imgs}`).attr('src', `https://openweathermap.org/img/wn/${nextImgs}@2x.png`);
-      }
+      // set the 5-days forecast
+      // for (let i = 7; i < data.list.length; i += 8) {
+      //   //console.log(data.list[i]);
+      //   var nextDay = data.list[i].dt_txt.substring(5, 10);
+      //   var nextTemp = Math.round(data.list[i].main.temp);
+      //   var nextWeather = data.list[i].weather[0].description;
+      //   var nextWind = data.list[i].wind.speed;
+      //   var nextHumidity = data.list[i].main.humidity;
+      //   var nextImgs = data.list[i].weather[0].icon;
+      //   var nextDaysVar = (i + 1) / 8;    //1-5
+      //   var days = `day${nextDaysVar}`;
+      //   var temps = `temp${nextDaysVar}`;
+      //   var weathers = `weather${nextDaysVar}`;
+      //   var winds = `wind${nextDaysVar}`;
+      //   var humidities = `humidity${nextDaysVar}`;
+      //   var imgs = `day${nextDaysVar}-img`;
+      //   $(`.${days}`).text(nextDay);
+      //   $(`.${temps}`).text(`${nextTemp}°C`);
+      //   $(`.${weathers}`).text(nextWeather);
+      //   $(`.${winds}`).text(`wind: ${nextWind}km/h`);
+      //   $(`.${humidities}`).text(`humidity: ${nextHumidity}%`);
+      //   $(`.${imgs}`).attr('src', `https://openweathermap.org/img/wn/${nextImgs}@2x.png`);
+      // }
+      
     })
 };
 
 //when searchForm submitted, create a button with searched city
 function makeBtnAndDisplayOnScreen(place) {
-  if(!place) {
-    return null;
-  }
-  newBtn = $('<button>');
+  var newBtn = $('<button>');
   newBtn.attr('type', 'button');
   newBtn.addClass("btn btn-secondary btn-lg btn-block m-1");
   newBtn.text(place);
-
   newBtn.on('click', function () {
     var text = $(this).text();
     searchWeather(text);
-  });  
+  })
 
   prevCities.prepend(newBtn);
+  //think this should be moved out of function, but how to pass through argument?? 
   citySearch.val('')
   removeOldestBtn();
 }
 
-
+//I BROKE IT, IT DOESNT MAKE ANY BUTTONS NOW
+//trying to remake function to make a button: 
 function getFromLocalStorageAndMakeButtons() {
   if(searchHistoryArr.length == 0) {
     return null;
   }
   for(let i = 0; i < searchHistoryArr.length; i++ ) {
-    newBtn = $('<button>');
+    var newBtn = $('<button>');
     newBtn.attr('type', 'button');
     newBtn.addClass("btn btn-secondary btn-lg btn-block m-1");
     newBtn.text(searchHistoryArr[i]);
-
     newBtn.on('click', function () {
       var text = $(this).text();
       searchWeather(text);
     })
-
     prevCities.append(newBtn);
   }
 }
@@ -177,18 +178,20 @@ $(function () {
   });
 });
 
-
-//upon load, get buttons for searches from last session
 getFromLocalStorageAndMakeButtons();
-
-searchForm.on('submit', (e) => {
-  e.preventDefault(); 
-  var city = citySearch.val();
-  //console.log(city) //is good
-  searchWeather(city);
-});
-
+searchForm.on('submit', (e) => searchWeather(e));
 searchForm.on('submit', () => makeBtnAndDisplayOnScreen(citySearch.val()));
 
 
 
+
+
+
+//last time: 
+//got rid of searchHistory function, merged in with searchWeather
+//--> think there was a bug tho, wasn't able to click the buttons to get them to pull the weather cuz the (event) only carried to event.preventDefault() and not the rest of it 
+//make 'create button' into its own function, was called in 2 areas?? 
+//if statements weed out invalid or empty search
+//cannot make same button twice,
+//local storage 
+//um

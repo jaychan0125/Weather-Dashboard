@@ -3,9 +3,8 @@ var apiKey = 'cb46b644cecafb55998e4ecf9d01a0e5';
 var citySearchBtn = $('#citySearchBtn');
 var searchForm = $('#search-form');
 var citySearch = $('input[name="citySearch"]');
-var searchHistoryArr = JSON.parse(localStorage.getItem('searchHistory')) || [];
+var searchHistoryArr = [];
 var prevCities = $('#prevCities');
-var newBtn
 //dates
 var today = dayjs();
 var thisDay = today.format('YYYY-MM-DD');
@@ -17,39 +16,38 @@ var todayWeather = $('.current-weather');
 var todayWind = $('.currernt-wind');
 var todayHumidity = $('.current-humidity');
 
+//TODO: 
+//MAKE IFs: SO THAT IF SEARCH IS EMPTY OR INVALID, WILL ALERT TO RETRY
+//MAKE IFs: SO TAHT IF CITY ALREADY IN HISTORY, WILL NOT ADD AGAIN
+
+
+function searchHistory(event) {
+  event.preventDefault();
+  console.log(`seach value: ${citySearch.val()}`);
+  searchWeather(citySearch.val());
+  citySearch.val('');
+}
 
 function searchWeather(city) {
-  //checks to see its not an empty string:
-  if(!city) {
-    alert('Please enter a correct city or province location');
-    return null;
-  }
+  searchHistoryArr.unshift(city);
+  // console.log(searchHistoryArr);
+
+  searchHistoryArr.length >= 7 ? searchHistoryArr.pop() : null;
+  localStorage.setItem('searchHistory', searchHistoryArr);
 
   //get lat & lon values for the city searched: 
   var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
   fetch(geoAPI)
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (data) {
-    // console.log(data);
-    // console.log(city);
-    //check to see if inputed location is valid:
-    if (data.length === 0) {
-      alert('Invalid, Please enter a different city');
-      return null;
-    }
-    var lat = data[0].lat;
-    var lon = data[0].lon;
-    // console.log(lat, lon)
-    getWeatherForecast(lat, lon);
-    
-    searchHistoryArr.unshift(city);
-    searchHistoryArr.length >= 7 ? searchHistoryArr.pop() : null;
-    localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
-  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      // console.log(data);
+      var lat = data[0].lat;
+      var lon = data[0].lon;
+      getWeatherForecast(lat, lon);
+    })
 }
-
 
 function getWeatherForecast(lat, lon) {
   //get the weather using the lat/lon coordinates
@@ -59,13 +57,14 @@ function getWeatherForecast(lat, lon) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
+      //console.log(data);
       var temp = Math.round(data.list[0].main.temp);
       var weather = data.list[0].weather[0].description;
       var wind = ((data.list[0].wind.speed) * 3.6).toFixed(2);
       var humidity = data.list[0].main.humidity;
       var img = data.list[0].weather[0].icon
       //set current forecast 
+      console.log(searchHistoryArr[0]);
       curCityHeader.text(`${thisDay} ${searchHistoryArr[0]}`);
       todayTemp.text(`${temp}°C`);
       todayWeather.text(weather);
@@ -100,46 +99,21 @@ function getWeatherForecast(lat, lon) {
 };
 
 //when searchForm submitted, create a button with searched city
-function makeBtnAndDisplayOnScreen(place) {
-  if(!place) {
-    return null;
-  }
-  newBtn = $('<button>');
+function makeBtn(city) {
+  var newBtn = $('<button>');
   newBtn.attr('type', 'button');
   newBtn.addClass("btn btn-secondary btn-lg btn-block m-1");
-  newBtn.text(place);
-
-  newBtn.on('click', function () {
-    var text = $(this).text();
-    searchWeather(text);
-  });  
-
+  newBtn.text(`${city}`);
   prevCities.prepend(newBtn);
-  citySearch.val('')
+
+  //I THINK I SHOULD MOVE THIS OUT, AS NEWBTN AND SEARCHWEATHR TRIGGER E/O, SO IT MAKES IT EVERY TIME
+  newBtn.on('click', function () {
+    searchWeather(city);
+  })
   removeOldestBtn();
 }
 
-
-function getFromLocalStorageAndMakeButtons() {
-  if(searchHistoryArr.length == 0) {
-    return null;
-  }
-  for(let i = 0; i < searchHistoryArr.length; i++ ) {
-    newBtn = $('<button>');
-    newBtn.attr('type', 'button');
-    newBtn.addClass("btn btn-secondary btn-lg btn-block m-1");
-    newBtn.text(searchHistoryArr[i]);
-
-    newBtn.on('click', function () {
-      var text = $(this).text();
-      searchWeather(text);
-    })
-
-    prevCities.append(newBtn);
-  }
-}
-
-//when more than 6 prev city buttons, get rid of the oldest search: 
+//when more than 6 prev city buttons, get rid of the last/oldest search: 
 function removeOldestBtn() {
   if (prevCities.get(0).childElementCount >= 7) {
     prevCities.children().last().remove();
@@ -177,18 +151,4 @@ $(function () {
   });
 });
 
-
-//upon load, get buttons for searches from last session
-getFromLocalStorageAndMakeButtons();
-
-searchForm.on('submit', (e) => {
-  e.preventDefault(); 
-  var city = citySearch.val();
-  //console.log(city) //is good
-  searchWeather(city);
-});
-
-searchForm.on('submit', () => makeBtnAndDisplayOnScreen(citySearch.val()));
-
-
-
+searchForm.on('submit', searchHistory);

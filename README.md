@@ -1,25 +1,41 @@
-# 06 Server-Side APIs: Weather Dashboard
+# Work Day Scheduler
 
-## Your Task
+## 05 Third-Party APIs: Work Day Scheduler
 
-Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+This weeks challenge will be so useful in helping me stay organised! We’re making a workday scheduler! Following the theme of ‘making our lives easier’, we were given starter code to work with! Even hints, yay! 
 
-Use the [5 Day Weather Forecast](https://openweathermap.org/forecast5) to retrieve weather data for cities. The base URL should look like the following: `https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}`. After registering for a new API key, you may need to wait up to 2 hours for that API key to activate.
+I think one of the biggest lessons I’ve learned from this challenge is that my code doesn’t have to be the most condensed (although it would be ideal if it was more legible and succinct), and as long as it FUNCTIONS as it should then I’ll be okay. I was paralyzed for the better part of an evening when I was struggling to write just one line of code so that the localStorage items display in their appropriate sections. After reaching out to AskBCS, Drew kindly helped me understand localStorage better, and showed me that it was okay to just have a line of code for EACH SECTION to display their stored contents. During my review before submitting the challenge, I realised that the code I put for this part had a PATTERN, and I WOULD be able to shorten it using some of the logic I used in other parts of my code! It was very exciting since this was originally how I envisioned to write it, but it just took me understanding how my code functions better first before I could do it! 
 
-**Hint**: Using the 5 Day Weather Forecast API, you'll notice that you will need to pass in coordinates instead of just a city name. Using the OpenWeatherMap APIs, how could we retrieve geographical coordinates given a city name?
+Other than this revelation, the trickier part of this challenge would likely be traversing the DOM, and accessing the elements that I needed, especially when all the sections are basically the same except for an ID. 
+I feel like overall this one was pretty straightforward; and given access to libraries such as Day.js, it made the task much more manageable than if I didn’t have it. 
+ 
 
-You will use `localStorage` to store any persistent data. For more information on how to work with the OpenWeather API, refer to the [Full-Stack Blog on how to use API keys](https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys).
+## Table of Contents
 
-## User Story
+- [Deployment](#deployment)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Citations](#citations)
+- [License](#license)
 
+## Deployment
+
+Link to my weather dashboard: 
+
+**https://jaychan0125.github.io/WorkDay-Scheduler/**
+
+
+## Requirements
+
+Here are the provided requirements:
+### User Story
 ```
 AS A traveler
 I WANT to see the weather outlook for multiple cities
 SO THAT I can plan a trip accordingly
 ```
 
-## Acceptance Criteria
-
+### Acceptance Criteria
 ```
 GIVEN a weather dashboard with form inputs
 WHEN I search for a city
@@ -32,71 +48,26 @@ WHEN I click on a city in the search history
 THEN I am again presented with current and future conditions for that city
 ```
 
-## Mock-Up
+## Usage
 
-The following image shows the web application's appearance and functionality:
+![Weather Dashboard](./Assets/wd-main.png)
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Atlanta.](./Assets/06-server-side-apis-homework-demo.png)
+Here you'll find a Weather Dashboard! Please enter the city you're looking for the weather report for in the search input! They'll also be text-complete for some popular city destinations I'd love to travel to! 
 
-## Grading Requirements
+![Cities Searched](./Assets/wd-display.png) 
 
-> **Note**: If a Challenge assignment submission is marked as “0”, it is considered incomplete and will not count towards your graduation requirements. Examples of incomplete submissions include the following:
->
-> * A repository that has no code
->
-> * A repository that includes a unique name but nothing else
->
-> * A repository that includes only a README file but nothing else
->
-> * A repository that only includes starter code
+Once you hit search, the weather dashboard for the current day, the 5-day weather report, and a button with your searched city will populate! You can create a maximum of 6 buttons, so you'll be able to look for the weather in those cities with just a click of the button instead of a whole new search! 
 
-This Challenge is graded based on the following criteria: 
 
-### Technical Acceptance Criteria: 40%
+## Citations
 
-* Satisfies all of the above acceptance criteria plus the following:
+Maqsood, A., Moatar, T., Krishna, &amp; Zhang, S. (2023). Web APIs Day 1-3. Lecture. 
 
-    * Uses the OpenWeather API to retrieve weather data.
+Compagnoni, J. (2023). Tutoring.
 
-    * Uses `localStorage` to store persistent data.
+## License
 
-### Deployment: 32%
+Licensed under the MIT license.
 
-* Application deployed at live URL.
+---
 
-* Application loads with no errors.
-
-* Application GitHub URL submitted.
-
-* GitHub repository that contains application code.
-
-### Application Quality: 15%
-
-* Application user experience is intuitive and easy to navigate.
-
-* Application user interface style is clean and polished.
-
-* Application resembles the mock-up functionality provided in the Challenge instructions.
-
-### Repository Quality: 13%
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains quality readme file with description, screenshot, and link to deployed application.
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a readme describing the project.
-
-- - -
-© 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
