@@ -26,7 +26,7 @@ function searchWeather(city) {
   }
 
   //get lat & lon values for the city searched: 
-  var geoAPI = `http://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
+  var geoAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${city},&limit=1&appid=${apiKey}`;
   fetch(geoAPI)
   .then(function (response) {
     return response.json();
@@ -53,7 +53,7 @@ function searchWeather(city) {
 
 function getWeatherForecast(lat, lon) {
   //get the weather using the lat/lon coordinates
-  var weatherAPI = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  var weatherAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
   fetch(weatherAPI)
     .then(function (response) {
       return response.json();
